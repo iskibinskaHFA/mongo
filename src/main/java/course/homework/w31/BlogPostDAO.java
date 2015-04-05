@@ -55,7 +55,7 @@ public class BlogPostDAO {
         return posts;
     }
 
-
+    
     public String addPost(String title, String body, List tags, String username) {
 
         System.out.println("inserting blog entry " + title + " " + body);
@@ -111,6 +111,26 @@ public class BlogPostDAO {
                                final String permalink) {
 
         // XXX HW 3.3, Work Here
+        
+          Document comment = new Document().append("body",body).append("author",name);
+        
+           if (email != null && !email.isEmpty()) {
+             comment.append("email", email);
+             }
+        
+           
+           // find the post by permalink
+                      
+          // Bson filter =  Filters.eq("permalink", permalink);
+          // Document post =   postsCollection.find(filter).first();
+                   
+          //Double  id = post.getDouble("_id");
+          
+          
+           postsCollection.updateOne(new Document("permalink", permalink), new Document("$push", 
+                new Document("comments", comment)));
+          
+          
         // Hints:
         // - email is optional and may come in NULL. Check for that.
         // - best solution uses an update command to the database and a suitable
